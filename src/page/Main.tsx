@@ -1,9 +1,9 @@
+/* eslint-disable */
 import { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
 import { styled } from "styled-components";
-import { GithubPicker, HuePicker, AlphaPickers } from "react-color";
+import { GithubPicker } from "react-color";
 import html2canvas from "html2canvas";
-import clipboard from "clipboard";
 
 const Main = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas | "">("");
@@ -41,8 +41,8 @@ const Main = () => {
       const dataUrl = event.target?.result as string;
       fabric.Image.fromURL(dataUrl, (image: fabric.Image) => {
         options;
-        canvas?.add(image);
-        canvas?.renderAll();
+        canvas.add(image);
+        canvas.renderAll();
       });
     };
     reader.readAsDataURL(file);
@@ -144,7 +144,7 @@ const Main = () => {
     },
   ];
 
-  const selectMenuHandler = (index) => {
+  const selectMenuHandler = (index: number) => {
     // parameter로 현재 선택한 인덱스 값을 전달해야 하며, 이벤트 객체(event)는 쓰지 않는다
     // 해당 함수가 실행되면 현재 선택된 Tab Menu 가 갱신.
     clickTab(index);
