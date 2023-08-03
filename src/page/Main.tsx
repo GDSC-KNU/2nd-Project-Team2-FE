@@ -35,6 +35,7 @@ const Main = () => {
     scaleY: 0.5, // 이미지 세로 축 크기 조절 값
   };
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files == null) return;
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (event: ProgressEvent<FileReader>) => {
@@ -47,7 +48,7 @@ const Main = () => {
     };
     reader.readAsDataURL(file);
   };
-  const handleColorChange = ({ hex }) => {
+  const handleColorChange = ({ hex }: any) => {
     setBackgroundColor(hex);
   };
   const handleCapture = () => {
@@ -104,11 +105,11 @@ const Main = () => {
 
     html2canvas(captureRef.current).then((canvas) => {
       canvas.toBlob((blob) => {
-        const blobUrl = URL.createObjectURL(blob);
+        const blobUrl = URL.createObjectURL(blob!);
         navigator.clipboard
           .write([
             new ClipboardItem({
-              [blob.type]: blob,
+              [blob!.type]: blob!,
             }),
           ])
           .then(function () {
@@ -177,15 +178,13 @@ const Main = () => {
           </li>
         ))}
       </TabMenu>
-      <Desc>
-        <p>{menuArr[currentTab].content}</p>
-      </Desc>
+      <Desc>{menuArr[currentTab].content}</Desc>
       {captureUrl && showModal && (
         <ModalWrapper>
           <ModalOverlay onClick={handleCloseModal} />
           <ImageModal>
             <CloseModalButton onClick={handleCloseModal}>X</CloseModalButton>
-            <img alt="미리보기" width="300" height="300" src={captureUrl} />
+            <img alt="미리보기" width="100%" height="100%" src={captureUrl} />
             <CopyButton onClick={handleCopy}>복사</CopyButton>
           </ImageModal>
         </ModalWrapper>
@@ -200,7 +199,7 @@ const CopyButton = styled.button`
   display: inline-block;
   font-size: 1rem;
   margin-top: 1rem;
-  width: 50%;
+  width: 100%;
 `;
 const CloseModalButton = styled.button`
   background: transparent;
@@ -210,30 +209,30 @@ const CloseModalButton = styled.button`
   right: 0;
 `;
 const ModalWrapper = styled.div`
-  height: 50%;
-  width: 30%;
-  top: 2rem;
+  height: 30rem;
+  width: 22.5rem;
+  top: 5rem;
   background-color: white;
   padding: 2rem;
   border: 1px dotted black;
   position: absolute;
 `;
 const ModalOverlay = styled.div`
-  height: 100%;
   width: 100%;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
 `;
 
 const ImageModal = styled.div`
-  height: 100%;
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   top: 50%;
   left: 50%;
+  padding-top: 3rem;
   transform: translate(-50%, -50%);
 `;
 
