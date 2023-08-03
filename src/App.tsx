@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./App.css";
-import Main from "./page/Main";
+import Main from "./page/Main.tsx";
 
 function App() {
   function setScreenSize() {
