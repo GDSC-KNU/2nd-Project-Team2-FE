@@ -19,7 +19,7 @@ const Main = () => {
       width: 550,
       backgroundColor: backgroundColor,
     });
-    fabric.Image.fromURL("2nd-Project-Team2-FE/public/assets/default.png", (img) => {
+    fabric.Image.fromURL("public/assets/default.png", (img) => {
       // Canvas에 이미지 추가
       newCanvas.add(img);
       // 이미지 위치 및 크기 조정
