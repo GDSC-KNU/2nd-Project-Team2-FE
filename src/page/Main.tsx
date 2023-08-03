@@ -6,7 +6,7 @@ import { GithubPicker } from "react-color";
 import html2canvas from "html2canvas";
 
 const Main = () => {
-  const [canvas, setCanvas] = useState<fabric.Canvas | "">("");
+  const [canvas, setCanvas] = useState<fabric.Canvas>();
   const [backgroundColor, setBackgroundColor] = useState<string>("#ffffff");
   const captureRef = useRef<HTMLDivElement>(null);
   const [captureUrl, SetCaptureUrl] = useState("");
@@ -42,8 +42,8 @@ const Main = () => {
       const dataUrl = event.target?.result as string;
       fabric.Image.fromURL(dataUrl, (image: fabric.Image) => {
         options;
-        canvas.add(image);
-        canvas.renderAll();
+        canvas!.add(image);
+        canvas!.renderAll();
       });
     };
     reader.readAsDataURL(file);
@@ -173,7 +173,7 @@ const Main = () => {
       </CanvasLayout>
       <TabMenu>
         {menuArr.map((el, index) => (
-          <li className={index === currentTab ? "submenu focused" : "submenu"} onClick={() => selectMenuHandler(index)}>
+          <li key={index} className={index === currentTab ? "submenu focused" : "submenu"} onClick={() => selectMenuHandler(index)}>
             {el.name}
           </li>
         ))}
