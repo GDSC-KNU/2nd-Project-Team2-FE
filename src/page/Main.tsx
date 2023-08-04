@@ -12,14 +12,14 @@ import coffee from "/assets/coffee.png";
 import glasses from "/assets/glasses.png";
 import glow from "/assets/glow.png";
 import graduationCloth from "/assets/graduationCloth.png";
-import graduationHat from "/assets/graduationCloth.png";
+import graduationHat from "/assets/graduationHat.png";
 import hotSix from "/assets/hotSix.png";
 import macbook from "/assets/macbook.png";
 import mask from "/assets/mask.png";
 import schoolUniform from "/assets/schoolUniform.png";
 import Smoke from "/assets/Smoke.png";
 import soju from "/assets/soju.png";
-import sunglass from "/assets/soju.png";
+import sunglass from "/assets/sunglass.png";
 
 const Main = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas>();
