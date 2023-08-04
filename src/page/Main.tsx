@@ -45,26 +45,26 @@ const Main = () => {
     setCheckItems(new Set());
     return newCanvas;
   };
-  const options = {
-    top: 100, // 원하는 위치 Y좌표 값
-    left: 100, // 원하는 위치 X좌표 값
-    scaleX: 0.5, // 이미지 가로 축 크기 조절 값
-    scaleY: 0.5, // 이미지 세로 축 크기 조절 값
-  };
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files == null) return;
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (event: ProgressEvent<FileReader>) => {
-      const dataUrl = event.target?.result as string;
-      fabric.Image.fromURL(dataUrl, (image: fabric.Image) => {
-        options;
-        canvas!.add(image);
-        canvas!.renderAll();
-      });
-    };
-    reader.readAsDataURL(file);
-  };
+  // const options = {
+  //   top: 100, // 원하는 위치 Y좌표 값
+  //   left: 100, // 원하는 위치 X좌표 값
+  //   scaleX: 0.5, // 이미지 가로 축 크기 조절 값
+  //   scaleY: 0.5, // 이미지 세로 축 크기 조절 값
+  // };
+  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files == null) return;
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onload = (event: ProgressEvent<FileReader>) => {
+  //     const dataUrl = event.target?.result as string;
+  //     fabric.Image.fromURL(dataUrl, (image: fabric.Image) => {
+  //       options;
+  //       canvas!.add(image);
+  //       canvas!.renderAll();
+  //     });
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
   const handleColorChange = ({ hex }: any) => {
     setBackgroundColor(hex);
   };
@@ -112,11 +112,6 @@ const Main = () => {
   const [currentTab, clickTab] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [checkItems, setCheckItems] = useState(new Set());
-  const checkList = [
-    ...Array(15)
-      .fill("체크")
-      .map((v, i) => v + i),
-  ];
 
   const photoList = [
     cigarette,
