@@ -183,8 +183,6 @@ const Main = () => {
       };
     } else {
       checkItems.delete(id);
-      setCheckItems(new Set(checkItems));
-
       // 이미지 삭제
       const objects = canvas!.getObjects();
       objects.forEach((obj) => {
