@@ -45,6 +45,31 @@ const Main = () => {
     setCheckItems(new Set());
     return newCanvas;
   };
+  const itemReset = (): fabric.Canvas => {
+    const objects = canvas!.getObjects();
+    objects.forEach((obj, index) => {
+      if (index != 0) {
+        canvas!.remove(obj);
+        console.log(obj);
+      }
+    });
+    console.log(objects);
+    const newCanvas = new fabric.Canvas("canvas", {
+      height: 370,
+      width: 370,
+      backgroundColor: backgroundColor,
+    });
+    fabric.Image.fromURL(defaultPng, (img) => {
+      // Canvas에 이미지 추가
+      newCanvas.add(img);
+      // 이미지 위치 및 크기 조정
+      img.set({ left: 0, top: 0, scaleX: 0.65, scaleY: 0.65 });
+      newCanvas.renderAll();
+    });
+    setCheckItems(new Set());
+    console.log(checkItems);
+    return newCanvas;
+  };
   // const options = {
   //   top: 100, // 원하는 위치 Y좌표 값
   //   left: 100, // 원하는 위치 X좌표 값
@@ -137,10 +162,9 @@ const Main = () => {
     const id = event.target.id;
     const isChecked = event.target.checked;
     // const ctx = canvas.getContext("2d");
-
+    console.log(id);
     if (isChecked) {
       setCheckItems(checkItems.add(id));
-
       // 이미지 로드
       const index = photoList.indexOf(id);
       const img = new Image();
@@ -149,6 +173,7 @@ const Main = () => {
       // 이미지 로드 후 fabric.Image 객체 생성
       img.onload = () => {
         const newImg = new fabric.Image(img, {
+          name: id,
           top: 0,
           left: 0,
           scaleX: 0.65,
@@ -156,20 +181,20 @@ const Main = () => {
         });
         canvas!.add(newImg);
       };
-    }
-    // else {
-    //   checkItems.delete(id);
-    //   setCheckItems(new Set(checkItems));
+    } else {
+      checkItems.delete(id);
+      setCheckItems(new Set(checkItems));
 
-    //   // 이미지 삭제
-    //   const objects = canvas!.getObjects();
-    //   objects.forEach((obj) => {
-    //     if (obj!.src === id) {
-    //       canvas!.remove(obj);
-    //       console.log(obj);
-    //     }
-    //   });
-    // }
+      // 이미지 삭제
+      const objects = canvas!.getObjects();
+      objects.forEach((obj) => {
+        if (obj!.name === id) {
+          canvas!.remove(obj);
+          console.log(obj);
+        }
+      });
+      console.log(objects);
+    }
   };
   const handleCopy = () => {
     if (!captureRef.current) {
@@ -206,7 +231,6 @@ const Main = () => {
           <AlphaPicker color={color} onChange={handleAlphaChange} /> */}
             <h3>배경화면 색을 골라주세요!</h3>
           </BackgroundColorPicker>
-          <button onClick={initCanvas}>Reset and add again</button>
         </>
       ),
     },
@@ -215,7 +239,7 @@ const Main = () => {
       content: (
         <>
           {/* <input type="file" onChange={handleImageUpload} /> */}
-          <button onClick={initCanvas}>Reset and add again</button>
+          <button onClick={itemReset}>Reset and add again</button>
           <CheckBoxList>
             {photoList.map((issue, index) => (
               <CheckBox key={index} id={issue}>
@@ -259,6 +283,23 @@ const Main = () => {
       newCanvas.renderAll();
     });
     setCanvas(newCanvas);
+    checkItems.forEach((item) => {
+      console.log(item);
+    });
+    // const index = photoList.indexOf(id);
+    // const img = new Image();
+    // img.src = photoList[index];
+
+    // 이미지 로드 후 fabric.Image 객체 생성
+    // img.onload = () => {
+    //   const newImg = new fabric.Image(img, {
+    //     top: 0,
+    //     left: 0,
+    //     scaleX: 0.65,
+    //     scaleY: 0.65,
+    //   });
+    //   canvas!.add(newImg);
+    // };
   }, [backgroundColor]);
   return (
     <Layout>
