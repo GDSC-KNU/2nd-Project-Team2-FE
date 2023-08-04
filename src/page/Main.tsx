@@ -4,6 +4,22 @@ import { fabric } from "fabric";
 import { styled } from "styled-components";
 import { GithubPicker } from "react-color";
 import html2canvas from "html2canvas";
+import defaultPng from "/assets/default.png";
+import cigarette from "/assets/cigarette.png";
+import darkCircle from "/assets/darkCircle.png";
+import hat from "/assets/hat.png";
+import coffee from "/assets/coffee.png";
+import glasses from "/assets/glasses.png";
+import glow from "/assets/glow.png";
+import graduationCloth from "/assets/graduationCloth.png";
+import graduationHat from "/assets/graduationCloth.png";
+import hotSix from "/assets/hotSix.png";
+import macbook from "/assets/macbook.png";
+import mask from "/assets/mask.png";
+import schoolUniform from "/assets/schoolUniform.png";
+import Smoke from "/assets/Smoke.png";
+import soju from "/assets/soju.png";
+import sunglass from "/assets/soju.png";
 
 const Main = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas>();
@@ -15,17 +31,18 @@ const Main = () => {
   }, []);
   const initCanvas = (): fabric.Canvas => {
     const newCanvas = new fabric.Canvas("canvas", {
-      height: 570,
-      width: 550,
+      height: 370,
+      width: 370,
       backgroundColor: backgroundColor,
     });
-    fabric.Image.fromURL("public/assets/default.png", (img) => {
+    fabric.Image.fromURL(defaultPng, (img) => {
       // Canvas에 이미지 추가
       newCanvas.add(img);
       // 이미지 위치 및 크기 조정
-      img.set({ left: 0, top: 0, scaleX: 1, scaleY: 1 });
+      img.set({ left: 0, top: 0, scaleX: 0.65, scaleY: 0.65 });
       newCanvas.renderAll();
     });
+    setCheckItems(new Set());
     return newCanvas;
   };
   const options = {
@@ -94,9 +111,70 @@ const Main = () => {
   // Tab Menu 중 현재 어떤 Tab이 선택되어 있는지 확인하기 위한 currentTab 상태와 currentTab을 갱신하는 함수가 존재해야 하고, 초기값은 0.
   const [currentTab, clickTab] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [checkItems, setCheckItems] = useState(new Set());
+  const checkList = [
+    ...Array(15)
+      .fill("체크")
+      .map((v, i) => v + i),
+  ];
 
+  const photoList = [
+    cigarette,
+    coffee,
+    darkCircle,
+    glasses,
+    glow,
+    graduationCloth,
+    graduationHat,
+    hat,
+    hotSix,
+    macbook,
+    mask,
+    schoolUniform,
+    Smoke,
+    soju,
+    sunglass,
+  ];
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+  const handleCheckBoxClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const id = event.target.id;
+    const isChecked = event.target.checked;
+    // const ctx = canvas.getContext("2d");
+
+    if (isChecked) {
+      setCheckItems(checkItems.add(id));
+
+      // 이미지 로드
+      const index = photoList.indexOf(id);
+      const img = new Image();
+      img.src = photoList[index];
+
+      // 이미지 로드 후 fabric.Image 객체 생성
+      img.onload = () => {
+        const newImg = new fabric.Image(img, {
+          top: 0,
+          left: 0,
+          scaleX: 0.65,
+          scaleY: 0.65,
+        });
+        canvas!.add(newImg);
+      };
+    }
+    // else {
+    //   checkItems.delete(id);
+    //   setCheckItems(new Set(checkItems));
+
+    //   // 이미지 삭제
+    //   const objects = canvas!.getObjects();
+    //   objects.forEach((obj) => {
+    //     if (obj!.src === id) {
+    //       canvas!.remove(obj);
+    //       console.log(obj);
+    //     }
+    //   });
+    // }
   };
   const handleCopy = () => {
     if (!captureRef.current) {
@@ -125,16 +203,38 @@ const Main = () => {
     {
       name: "배경",
       content: (
-        <BackgroundColorPicker>
-          <GithubPicker colors={customColors} onChangeComplete={handleColorChange} />
-          {/* <HuePicker color={color} onChange={handleHueChange} />
+        <>
+          <BackgroundColorPicker>
+            <GithubPicker colors={customColors} onChangeComplete={handleColorChange} />
+            {/* <HuePicker color={color} onChange={handleHueChange} />
 
           <AlphaPicker color={color} onChange={handleAlphaChange} /> */}
-          <h3>배경화면 색을 골라주세요!</h3>
-        </BackgroundColorPicker>
+            <h3>배경화면 색을 골라주세요!</h3>
+          </BackgroundColorPicker>
+          <button onClick={initCanvas}>Reset and add again</button>
+        </>
       ),
     },
-    { name: "꾸미기", content: <input type="file" onChange={handleImageUpload} /> },
+    {
+      name: "꾸미기",
+      content: (
+        <>
+          {/* <input type="file" onChange={handleImageUpload} /> */}
+          <button onClick={initCanvas}>Reset and add again</button>
+          <CheckBoxList>
+            {photoList.map((issue, index) => (
+              <CheckBox key={index} id={issue}>
+                <img alt="미리보기" width="30%" height="30%" src={issue} />
+                {/* <h3>{issue}</h3> */}
+                <label>
+                  <input type="checkbox" id={issue} onChange={handleCheckBoxClick} />
+                </label>
+              </CheckBox>
+            ))}
+          </CheckBoxList>
+        </>
+      ),
+    },
     {
       name: "저장",
       content: (
@@ -152,15 +252,15 @@ const Main = () => {
   };
   useEffect(() => {
     const newCanvas = new fabric.Canvas("canvas", {
-      height: 570,
-      width: 550,
+      height: 370,
+      width: 370,
       backgroundColor: backgroundColor,
     });
-    fabric.Image.fromURL("/default.png", (img) => {
+    fabric.Image.fromURL(defaultPng, (img) => {
       // Canvas에 이미지 추가
       newCanvas.add(img);
       // 이미지 위치 및 크기 조정
-      img.set({ left: 0, top: 0, scaleX: 1, scaleY: 1 });
+      img.set({ left: 0, top: 0, scaleX: 0.65, scaleY: 0.65 });
       newCanvas.renderAll();
     });
     setCanvas(newCanvas);
@@ -238,6 +338,7 @@ const ImageModal = styled.div`
 
 const Layout = styled.div`
   height: 100%;
+  max-width: 380px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -251,7 +352,7 @@ const Header = styled.h1`
 const BackgroundColorPicker = styled.div`
   margin: 1rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -270,7 +371,7 @@ const TabMenu = styled.ul`
   align-items: center;
   list-style: none;
   margin-top: 10px;
-  width: 93%;
+  width: 100%;
 
   .submenu {
     // 기본 Tabmenu 에 대한 CSS를 구현
@@ -294,4 +395,26 @@ const TabMenu = styled.ul`
   & div.desc {
     text-align: center;
   }
+`;
+
+const CheckBoxList = styled.div`
+  width: 100%;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CheckBox = styled.div`
+  width: 90%;
+  border: 2px solid black;
+  border-radius: 2%;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0rem 1rem 0rem 0rem;
 `;
